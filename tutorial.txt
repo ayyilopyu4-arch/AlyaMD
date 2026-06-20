@@ -1,0 +1,276 @@
+================================================================================
+                         AlyaMD - PANDUAN LENGKAP
+                    WhatsApp Bot Multi-Device by ayyilopyu4-arch
+================================================================================
+
+Halo! Selamat datang di Ourin MD. Panduan ini akan membantu kamu dari awal 
+hingga bot siap digunakan. Ikuti langkah-langkahnya dengan teliti!
+
+
+================================================================================
+                              PERSIAPAN AWAL
+================================================================================
+
+1. INSTALL NODE.JS
+   - Buka https://nodejs.org
+   - Download versi LTS (Long Term Support)
+   - Install seperti biasa, klik Next sampai selesai
+   - Untuk memastikan sudah terinstall, buka CMD/Terminal lalu ketik:
+     node -v
+     npm -v
+   - Jika muncul versi, berarti sudah work
+
+2. INSTALL GIT (Opsional, untuk update)
+   - Buka https://git-scm.com
+   - Download dan install
+   
+3. INSTALL FFMPEG (Untuk sticker video)
+   - Windows: Download dari https://www.gyan.dev/ffmpeg/builds/
+             Extract, lalu tambahkan ke PATH
+   - Linux: sudo apt install ffmpeg
+   - Mac: brew install ffmpeg
+
+
+================================================================================
+                           INSTALASI BOT
+================================================================================
+
+1. EXTRACT FILE
+   - Extract file zip ini ke folder yang kamu inginkan
+   - Contoh: D:\AlyaMD atau /home/user/Alya-MD
+
+2. BUKA TERMINAL/CMD
+   - Windows: Klik kanan di folder > Open in Terminal
+   - Atau tekan Win+R, ketik "cmd", lalu cd ke folder bot
+   - Contoh: cd D:\AlyaMD
+
+3. INSTALL DEPENDENCIES
+   - Ketik perintah ini dan tunggu sampai selesai:
+     npm install
+   - Proses ini membutuhkan waktu beberapa menit tergantung koneksi internet
+
+4. KONFIGURASI BOT
+   - Buka file config.js dengan text editor (Notepad++, VS Code, dll)
+   - Edit bagian-bagian berikut:
+
+   a. Owner Number (WAJIB)
+      owner: {
+          name: 'Nama Kamu',
+          number: ['628123456789']  <- Ganti dengan nomor kamu
+      }
+      
+   b. Pairing Number (WAJIB)
+      session: {
+          pairingNumber: '628123456789',  <- Nomor WA yang akan jadi bot
+          usePairingCode: true
+      }
+      
+   c. Mode Bot
+      mode: 'public'  <- 'public' untuk semua orang, 'self' hanya kamu
+
+   d. Nama Bot
+      bot: {
+          name: 'Nama Bot Kamu',
+          version: '1.0.0',
+          developer: 'Nama Developer'
+      }
+
+5. JALANKAN BOT
+   - Untuk development (auto-reload saat ada perubahan):
+     npm run dev
+     
+   - Untuk production:
+     npm start
+
+
+================================================================================
+                            PAIRING CODE
+================================================================================
+
+Saat pertama kali menjalankan bot, kamu akan diminta memasukkan pairing code:
+
+1. Jalankan bot dengan: npm run dev
+2. Bot akan menampilkan pesan meminta input nomor
+3. Masukkan nomor WhatsApp yang akan dijadikan bot (tanpa + atau 0)
+   Contoh: 628123456789
+4. Buka WhatsApp di HP > Linked Devices > Link a Device
+5. Pilih "Link with phone number instead"
+6. Masukkan kode yang muncul di terminal
+7. Tunggu sampai koneksi berhasil!
+
+
+================================================================================
+                          STRUKTUR FOLDER
+================================================================================
+
+Ourin-MD/
+├── index.js          <- Entry point, jangan diubah
+├── config.js         <- Konfigurasi utama, edit sesuai kebutuhan
+├── package.json      <- Dependencies
+│
+├── src/              <- Core system
+│   ├── handler.js    <- Message handler
+│   ├── connection.js <- Koneksi WhatsApp
+│   └── lib/          <- Library pendukung
+│
+├── plugins/          <- Semua command ada di sini
+│   ├── main/         <- Menu, ping, dll
+│   ├── download/     <- Downloader (TikTok, YouTube, dll)
+│   ├── ai/           <- AI features
+│   ├── sticker/      <- Sticker maker
+│   ├── group/        <- Fitur grup
+│   ├── owner/        <- Khusus owner
+│   └── ...
+│
+├── assets/           <- Gambar, audio, video
+│   ├── images/       <- Gambar untuk menu
+│   └── audio/        <- Audio/ringtone
+│
+└── storage/          <- Data tersimpan (jangan hapus!)
+    └── session/      <- Session WhatsApp
+
+
+================================================================================
+                             COMMAND DASAR
+================================================================================
+
+INFORMASI:
+  .menu          - Tampilkan menu utama
+  .ping          - Cek respon bot
+  .info          - Informasi bot
+  .owner         - Kontak owner
+
+STICKER:
+  .sticker       - Bikin sticker dari gambar/video
+  .toimg         - Konversi sticker ke gambar
+  .tomp3         - Konversi video ke audio
+
+DOWNLOAD:
+  .tiktok [url]  - Download TikTok
+  .play [judul]  - Download lagu
+  .ytmp4 [url]   - Download video YouTube
+
+GROUP:
+  .kick @user    - Kick member
+  .add 628xxx    - Invite member
+  .promote @user - Jadikan admin
+  .demote @user  - Cabut admin
+
+OWNER:
+  .setmenu 1-5   - Ubah tampilan menu
+  .addprem @user - Tambah premium user
+  .ban @user     - Banned user
+  .bc [pesan]    - Broadcast ke semua chat
+
+
+================================================================================
+                        MENAMBAH PLUGIN BARU
+================================================================================
+
+note: agak beda sedikit sama plugn plugin di sc lain :b
+
+1. Buat file baru di folder plugins/main, misal: test.js
+
+2. Isi dengan kode berikut:
+
+   const pluginConfig = {
+       name: 'test',
+       alias: ['coba', 'tes'],
+       category: 'main',
+       description: 'Plugin percobaan',
+       usage: '.test',
+       example: '.test',
+       isOwner: false,
+       isPremium: false,
+       isGroup: false,
+       cooldown: 3,
+       limit: 0
+   };
+
+   async function handler(m, { sock }) {
+       await m.reply('Halo! Plugin berhasil!');
+   }
+
+   module.exports = { config: pluginConfig, handler };
+
+3. Simpan file, bot akan auto-reload dan command .test siap digunakan!
+
+
+================================================================================
+                            TROUBLESHOOTING
+================================================================================
+
+1. "Cannot find module ..."
+   Solusi: Jalankan npm install lagi
+
+2. "Connection closed"
+   Solusi: Pastikan internet stabil, tunggu auto-reconnect
+
+3. "Session expired"
+   Solusi: Hapus folder storage/session, lalu pairing ulang
+
+4. "Rate limit exceeded"
+   Solusi: Tunggu beberapa menit, jangan spam command
+
+5. Bot tidak merespon
+   - Cek apakah mode sudah 'public'
+   - Cek apakah nomor owner sudah benar
+   - Restart bot dengan npm run dev
+
+6. Sticker tidak muncul
+   Solusi: Pastikan ffmpeg sudah terinstall
+
+
+================================================================================
+                              HOSTING
+================================================================================
+
+Bot ini bisa di-host di berbagai platform:
+
+1. VPS (Recommended)
+   - DigitalOcean, Vultr, Linode
+   - Gunakan pm2 untuk keep alive:
+     npm install -g pm2
+     pm2 start index.js --name ourin
+     pm2 save
+     pm2 startup
+
+2. Panel (Pterodactyl, etc)
+   - Upload semua file
+   - Jalankan npm install
+   - Start dengan npm start
+
+3. Termux (Android)
+   - Install Node.js: pkg install nodejs
+   - Install Git: pkg install git
+   - Clone dan jalankan seperti biasa
+
+
+================================================================================
+                          SUPPORT & CONTACT
+================================================================================
+
+Butuh bantuan? Hubungi:
+
+Developer: Xyard (Yard)
+IG: ghexta_0
+Saluran Resmi: 
+
+================================================================================
+                              CREDITS
+================================================================================
+
+Developer      : Xyrad (Yard)
+Lead Owner     : Rypzi
+Owner          : -
+Designer       : Xyard
+Baileys        : Wileys
+
+Terima kasih sudah menggunakan Ourin MD!
+Jangan lupa follow saluran resmi untuk update terbaru.
+
+================================================================================
+               JANGAN HAPUS/GANTI CREDITS & THANKS TO
+                        WAJIB JOIN SALURAN ADMIN
+================================================================================
+
