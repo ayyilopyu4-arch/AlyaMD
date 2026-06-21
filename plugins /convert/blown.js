@@ -3,12 +3,12 @@ const fs = require('fs')
 const path = require('path')
 
 const pluginConfig = {
-    name: 'tupai',
-    alias: ['chipmunk', 'alvin'],
+    name: 'blown',
+    alias: ['distort', 'distortion'],
     category: 'convert',
-    description: 'Mengubah suara menjadi suara tupai/chipmunk',
-    usage: '.tupai (reply audio/video)',
-    example: '.tupai',
+    description: 'Menambahkan efek blown/distortion ke audio',
+    usage: '.blown (reply audio/video)',
+    example: '.blown',
     isOwner: false,
     isPremium: false,
     isGroup: false,
@@ -31,23 +31,23 @@ async function handler(m, { sock }) {
     }
     
     if (!downloadFn) {
-        return m.reply(`🐿️ *ᴛᴜᴘᴀɪ ᴠᴏɪᴄᴇ*\n\n> Reply audio/video dengan command ini`)
+        return m.reply(`💥 *ʙʟᴏᴡɴ*\n\n> Reply audio/video dengan command ini`)
     }
     
-    m.react('🐿️')
+    m.react('💥')
     await m.reply(`⏳ *ᴍᴇᴍᴘʀᴏsᴇs...*`)
     
     const tempDir = path.join(process.cwd(), 'temp')
     if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir, { recursive: true })
     
     const inputPath = path.join(tempDir, `input_${Date.now()}.${ext}`)
-    const outputPath = path.join(tempDir, `tupai_${Date.now()}.mp3`)
+    const outputPath = path.join(tempDir, `blown_${Date.now()}.mp3`)
     
     try {
         const buffer = await downloadFn()
         fs.writeFileSync(inputPath, buffer)
         
-        execSync(`ffmpeg -y -i "${inputPath}" -af "asetrate=44100*1.5,atempo=0.8" -vn "${outputPath}"`, { stdio: 'ignore' })
+        execSync(`ffmpeg -y -i "${inputPath}" -af "acrusher=level_in=4:level_out=5:bits=8:mode=log:aa=1" -vn "${outputPath}"`, { stdio: 'ignore' })
         
         const audioBuffer = fs.readFileSync(outputPath)
         
